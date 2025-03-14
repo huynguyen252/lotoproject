@@ -12,5 +12,6 @@ data class Transaction(
     val playerId: Int = 0,
     val playType: String= "",
     val number: String= "",
-    val profit: Double= 0.0
+    val profit: Double= 0.0,
+    val name: String= ""
 )
