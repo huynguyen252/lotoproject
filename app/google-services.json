@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "913518001189",
+    "project_id": "lotoproject-4f2a1",
+    "storage_bucket": "lotoproject-4f2a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913518001189:android:4dfc3bd0ccc296132693cc",
+        "android_client_info": {
+          "package_name": "com.hnc.company.lototools"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfBrfzekCM0ziy6--Z9iGLX2AVVwgkwv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

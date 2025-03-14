@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     topBarView = { },
                     bottomBar = { BottomNavigationBar(navController = navController) },
                     content = { innerPadding ->
-                        NavGraph(BaseNavScreen.PlayerScreen.route, navController)
+                        NavGraph(BaseNavScreen.ResultScreen.route, navController)
                     }
                 )
             }

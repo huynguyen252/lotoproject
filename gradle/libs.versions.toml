@@ -1,6 +1,8 @@
 [versions]
 accompanistSystemuicontroller = "0.30.1"
 androidGradlePlugin = "8.5.1"
+firebaseBom = "33.10.0"
+firebaseFirestoreKtx = "25.1.2"
 hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 jsoup = "1.17.2"
@@ -37,6 +39,9 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }

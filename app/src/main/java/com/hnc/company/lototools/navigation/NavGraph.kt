@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun NavGraph(startDestination: String = BaseNavScreen.PlayerScreen.route, navController: NavHostController) {
+fun NavGraph(startDestination: String = BaseNavScreen.ResultScreen.route, navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = startDestination
