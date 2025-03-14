@@ -16,6 +16,12 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
 import org.jsoup.Jsoup
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 fun <T> Flow<Result<T>>.onEachError(action: suspend (Throwable) -> Unit): Flow<T> =
     transform { value ->
@@ -133,4 +139,26 @@ fun parseHtml(html: String): ResultModel {
         time = followTime,
         results = results
     )
+}
+
+fun Double.formatMoneyComma(): String {
+    return try {
+        val formatter = NumberFormat.getInstance(Locale.GERMANY) as DecimalFormat
+        formatter.applyPattern("###,###.##")
+        val result = formatter.format(this).replace(".", ",")
+        result
+    } catch (e: Exception) {
+        "0"
+    }
+}
+
+fun Long.toFormattedDate(): String {
+    val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    return sdf.format(Date(this))
+}
+
+fun getYesterdayFormatted(): String {
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_YEAR, -1)
+    return calendar.time.time.toFormattedDate()
 }

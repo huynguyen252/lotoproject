@@ -31,7 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -39,10 +42,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import com.hnc.company.lototools.R
 import com.hnc.company.lototools.base.composetheme.BaseTheme
 import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
 import com.hnc.company.lototools.base.composetheme.text.TextType
 import com.hnc.company.lototools.domain.entity.Player
+import com.hnc.company.lototools.navigation.BaseNavScreen
+import com.hnc.company.lototools.utils.formatMoneyComma
+import com.hnc.company.lototools.utils.nonRippleClick
 
 
 @Composable
@@ -51,7 +60,7 @@ fun PlayerStatisticScreen(
     viewModel: PlayerStatisticViewModel = hiltViewModel()
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Xếp hạng", "Tổng")
+    val tabs = listOf("Xếp hạng", "Phân tích")
 
     val players = viewModel.players.collectAsStateWithLifecycle().value
 
@@ -73,7 +82,7 @@ fun PlayerStatisticScreen(
         ) {
             // Tiêu đề
             Text(
-                text = "Leaderboard",
+                text = "Thống kê",
                 style = MaterialTheme.typography.h4.copy(
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -93,8 +102,10 @@ fun PlayerStatisticScreen(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index }
                     ) {
-                        Text(
+                        GPackageBaseText(
                             text = title,
+                            color = BaseTheme.colors.textWhite,
+                            type = TextType.BODY_MEDIUM,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
@@ -103,13 +114,22 @@ fun PlayerStatisticScreen(
 
             when (selectedTab) {
                 0 -> {
-                    TopThreeSection(topThree)
+                    TopThreeSection(navController, topThree)
                     Spacer(modifier = Modifier.height(8.dp))
                     Box(modifier = Modifier.weight(1f)) {
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             itemsIndexed(others) { index, user ->
                                 val rank = index + 4
-                                LeaderboardRow(player = user, rank = rank)
+                                LeaderboardRow(
+                                    player = user,
+                                    rank = rank
+                                ) {
+                                    navController.navigate(
+                                        BaseNavScreen.PlayerDetailScreen.route.plus(
+                                            "/${user.playerId}"
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
@@ -128,7 +148,7 @@ fun PlayerStatisticScreen(
 }
 
 @Composable
-fun TopThreeSection(top3: List<Player>) {
+fun TopThreeSection(navController: NavController, top3: List<Player>) {
     if (top3.isEmpty()) return
     val has1 = top3.size >= 1
     val has2 = top3.size >= 2
@@ -143,12 +163,29 @@ fun TopThreeSection(top3: List<Player>) {
     ) {
         // #2
         if (has2) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.nonRippleClick {
+                navController.navigate(BaseNavScreen.PlayerDetailScreen.route.plus("/${top3[1].playerId}"))
+            }, horizontalAlignment = Alignment.CenterHorizontally) {
+
+                GPackageBaseText(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(3.dp))
+                        .background(Color(0xFFC0C0C0))
+                        .padding(horizontal = 10.dp),
+                    text = "2",
+                    color = Color.White,
+                    type = TextType.BODY3
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
                 AvatarPodium(
                     player = top3[1],
                     rank = 2,
-                    podiumHeight = 80.dp
+                    podiumHeight = 60.dp
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 GPackageBaseText(
                     text = top3[1].name,
@@ -157,7 +194,7 @@ fun TopThreeSection(top3: List<Player>) {
                 )
 
                 GPackageBaseText(
-                    text = "${top3[1].amount} QP",
+                    text = "${top3[1].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
                 )
@@ -170,15 +207,30 @@ fun TopThreeSection(top3: List<Player>) {
 
         // #1
         if (has1) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.nonRippleClick {
+                navController.navigate(BaseNavScreen.PlayerDetailScreen.route.plus("/${top3[0].playerId}"))
+            }, horizontalAlignment = Alignment.CenterHorizontally) {
+
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_champion),
+                    modifier = Modifier
+                        .size(30.dp),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = ""
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
                 Box {
                     AvatarPodium(
                         player = top3[0],
                         rank = 1,
-                        podiumHeight = 100.dp // podium cao nhất
+                        podiumHeight = 80.dp // podium cao nhất
                     )
-                    // Có thể chèn icon vương miện ở đây (nếu muốn)
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 GPackageBaseText(
                     text = top3[0].name,
                     color = Color.White,
@@ -186,7 +238,7 @@ fun TopThreeSection(top3: List<Player>) {
                 )
 
                 GPackageBaseText(
-                    text = "${top3[0].amount} QP",
+                    text = "${top3[0].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
                 )
@@ -197,12 +249,30 @@ fun TopThreeSection(top3: List<Player>) {
 
         // #3
         if (has3) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.nonRippleClick {
+                navController.navigate(BaseNavScreen.PlayerDetailScreen.route.plus("/${top3[2].playerId}"))
+            }, horizontalAlignment = Alignment.CenterHorizontally) {
+
+                GPackageBaseText(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(3.dp))
+                        .background(Color(0xFFCD7F32))
+                        .padding(horizontal = 10.dp),
+                    text = "3",
+                    color = Color.White,
+                    type = TextType.BODY3
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
                 AvatarPodium(
                     player = top3[2],
                     rank = 3,
-                    podiumHeight = 80.dp
+                    podiumHeight = 60.dp
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 GPackageBaseText(
                     text = top3[2].name,
                     color = Color.White,
@@ -210,7 +280,7 @@ fun TopThreeSection(top3: List<Player>) {
                 )
 
                 GPackageBaseText(
-                    text = "${top3[2].amount} QP",
+                    text = "${top3[2].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
                 )
@@ -229,7 +299,7 @@ fun AvatarPodium(
 ) {
     // Hiển thị podium + avatar
     Box(
-        modifier = Modifier.width(if (rank == 1) 100.dp else 80.dp)
+        modifier = Modifier.width(if (rank == 1) 80.dp else 60.dp)
     ) {
 
         Box(
@@ -250,10 +320,15 @@ fun AvatarPodium(
         )
 
         Image(
-            painter = rememberAsyncImagePainter(player.avatar),
+            painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
+                    .data(player.avatar)
+                    .size(Size.ORIGINAL)
+                    .build()
+            ),
             contentDescription = "Avatar of ${player.name}",
             modifier = Modifier
-                .size(if (rank == 1) 80.dp else 56.dp)
+                .size(if (rank == 1) 75.dp else 58.dp)
                 .clip(CircleShape)
                 .border(2.dp, Color.White, CircleShape)
                 .align(Alignment.Center),
@@ -265,7 +340,8 @@ fun AvatarPodium(
 @Composable
 fun LeaderboardRow(
     player: Player,
-    rank: Int
+    rank: Int,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -273,7 +349,10 @@ fun LeaderboardRow(
             .padding(vertical = 8.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(Color.White.copy(alpha = 0.1f), shape = MaterialTheme.shapes.small)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .nonRippleClick {
+                onClick.invoke()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Hạng
@@ -309,7 +388,7 @@ fun LeaderboardRow(
 
         // Điểm
         Text(
-            text = "${player.amount} pts",
+            text = "${player.amount.formatMoneyComma()}đ",
             color = Color.White,
             style = MaterialTheme.typography.body2
         )

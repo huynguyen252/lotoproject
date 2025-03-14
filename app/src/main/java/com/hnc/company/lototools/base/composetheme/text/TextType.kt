@@ -16,7 +16,10 @@ enum class TextType {
     BODY_SMALL,
     BODY_LARGE,
     HEADER_LINE,
-    TITLE_LARGE
+    TITLE_LARGE,
+    BODY1,
+    BODY2,
+    BODY3,
 }
 
 @Composable
@@ -33,10 +36,13 @@ fun GPackageBaseText(
         TextType.TITLE -> BaseTheme.typography.title2
         TextType.BODY_LARGE -> BaseTheme.typography.bodyLarge
         TextType.BODY_MEDIUM -> BaseTheme.typography.body1
+        TextType.BODY3 -> BaseTheme.typography.body3
         TextType.BODY -> BaseTheme.typography.body1Regular
         TextType.BODY_SMALL -> BaseTheme.typography.body2
         TextType.HEADER_LINE -> BaseTheme.typography.headerLine
         TextType.TITLE_LARGE -> BaseTheme.typography.titleLarge
+        TextType.BODY1 -> BaseTheme.typography.title1
+        TextType.BODY2 -> BaseTheme.typography.title1
     }
 
     Text(

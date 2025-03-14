@@ -46,6 +46,7 @@ data class BaseTypography(
     val body1: TextStyle,
     val body1Regular: TextStyle,
     val body2: TextStyle,
+    val body3: TextStyle,
     val small1: TextStyle,
     val footnote: TextStyle,
     val footnoteItalic: TextStyle,
@@ -87,7 +88,7 @@ data class BaseTypography(
                 fontFamily = semibold,
             ),
             title1 = TextStyle(
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 lineHeight = 34.sp,
                 fontWeight = FontWeight.W500,
                 fontFamily = medium,
@@ -149,6 +150,12 @@ data class BaseTypography(
                 fontSize = 13.sp,
                 fontWeight = FontWeight.W400,
                 fontFamily = regular,
+            ),
+
+            body3 = TextStyle(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.W500,
+                fontFamily = medium,
             ),
             textNormal = TextStyle(
                 fontSize = 14.sp,

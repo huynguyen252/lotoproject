@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.BottomNavigation
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -55,7 +58,11 @@ class MainActivity : ComponentActivity() {
                     topBarView = { },
                     bottomBar = { BottomNavigationBar(navController = navController) },
                     content = { innerPadding ->
-                        NavGraph(BaseNavScreen.ResultScreen.route, navController)
+                        NavGraph(
+                            BaseNavScreen.PlayerScreen.route,
+                            navController,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
                 )
             }
@@ -67,9 +74,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
-        BaseNavScreen.ResultScreen,
         BaseNavScreen.PlayerScreen,
-        BaseNavScreen.SettingsScreen
+        BaseNavScreen.ResultScreen
     )
     NavigationBar(
         containerColor = BaseTheme.colors.purpleDark,
@@ -79,11 +85,14 @@ fun BottomNavigationBar(navController: NavHostController) {
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { screen ->
+            val isSelected = currentRoute == screen.route
             NavigationBarItem(
                 icon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(screen.icon ?: 0),
-                        contentDescription = screen.title
+                        contentDescription = screen.title,
+                        tint = if (isSelected) BaseTheme.colors.textWhite else BaseTheme.colors.black,
+                        modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
                     )
                 },
                 label = {

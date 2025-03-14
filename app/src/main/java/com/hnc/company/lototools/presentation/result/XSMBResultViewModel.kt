@@ -5,6 +5,7 @@ import com.hnc.company.lototools.base.mvi.BaseViewModel
 import com.hnc.company.lototools.data.request.GetResultRequest
 import com.hnc.company.lototools.domain.entity.ResultModel
 import com.hnc.company.lototools.domain.usecase.GetResultUseCase
+import com.hnc.company.lototools.utils.getYesterdayFormatted
 import com.hnc.company.lototools.utils.onEachError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,17 +22,24 @@ class XSMBResultViewModel @Inject constructor(
     private val _result: MutableStateFlow<ResultModel?> = MutableStateFlow(null)
     val result = _result.asStateFlow()
 
+    private val _date: MutableStateFlow<String> = MutableStateFlow(getYesterdayFormatted())
+    val date = _date.asStateFlow()
+
     init {
-        fetchData()
+        date.onEach { fetchData() }.launchIn(viewModelScopeExceptionHandler)
     }
 
     private fun fetchData() {
-        getResultUseCase.invoke(GetResultRequest(time = "12-03-2025"))
-            .onEachError {  }
+        getResultUseCase.invoke(GetResultRequest(time = date.value))
+            .onEachError { }
             .onEach {
                 _result.value = it
             }
             .launchIn(viewModelScopeExceptionHandler)
+    }
+
+    fun updateTime(toFormattedDate: String) {
+        _date.value = toFormattedDate
     }
 
 }
