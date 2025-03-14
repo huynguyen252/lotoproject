@@ -33,20 +33,46 @@ class PlayerStatisticViewModel @Inject constructor() : BaseViewModel() {
                 }
             }
 
-            firebaseDatabase.collection("transactions").get().addOnSuccessListener { transactionsSnapshot ->
-                for (doc in transactionsSnapshot.documents) {
-                    val transaction = doc.toObject(Transaction::class.java)
-                    if (transaction != null) {
-                        profitMap[transaction.playerId] =
-                            (profitMap[transaction.playerId] ?: 0.0) + transaction.profit
+            firebaseDatabase.collection("transactions").get()
+                .addOnSuccessListener { transactionsSnapshot ->
+                    for (doc in transactionsSnapshot.documents) {
+                        val transaction = doc.toObject(Transaction::class.java)
+                        if (transaction != null) {
+                            profitMap[transaction.playerId] =
+                                (profitMap[transaction.playerId] ?: 0.0) + transaction.profit
+                        }
                     }
-                }
 
-                _players.value = playersMap.values.map { player ->
-                    player.copy(amount = (profitMap[player.playerId] ?: 0.0))
-                }
+                    _players.value = playersMap.values.map { player ->
+                        player.copy(amount = (profitMap[player.playerId] ?: 0.0))
+                    }
 
-            }
+                }
+        }
+    }
+
+    private fun updateData() {
+        val transactions = listOf(
+            Transaction(date = "14/13/2025", playerId = 4, playType = "Lô", number = "", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 1, playType = "Lô", number = "51", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 2, playType = "Đuôi 2", number = "2 7", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 3, playType = "Lô", number = "", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 8, playType = "Lô", number = "", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 6, playType = "Lô", number = "82", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 5, playType = "Lô", number = "7", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 7, playType = "Lô", number = "", profit = -50000.0),
+            Transaction(date = "14/13/2025", playerId = 9, playType = "Lô", number = "12", profit = -50000.0)
+        )
+        val transactionCollection = firebaseDatabase.collection("transactions")
+
+        transactions.forEach { transaction ->
+            transactionCollection.add(transaction)
+                .addOnSuccessListener { documentReference ->
+                    println("Transaction added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    println("Error adding transaction: $e")
+                }
         }
     }
 }
