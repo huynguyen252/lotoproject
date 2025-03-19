@@ -3,7 +3,7 @@ package com.hnc.company.lototools.base.composetheme.images.internal
 import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.ghtk.business.gpackage.base.composetheme.images.StreamImageLoaderFactory
+import com.hnc.company.lototools.base.composetheme.images.StreamImageLoaderFactory
 
 
 public object StreamCoil {

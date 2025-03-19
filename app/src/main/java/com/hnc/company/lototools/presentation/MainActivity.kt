@@ -7,9 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -31,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hnc.company.lototools.base.composetheme.BaseTheme
 import com.hnc.company.lototools.base.composetheme.scafold.BaseScaffold
-import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
+import com.hnc.company.lototools.base.composetheme.text.BaseText
 import com.hnc.company.lototools.navigation.BaseNavScreen
 import com.hnc.company.lototools.navigation.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,7 +98,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                     } else {
                         BaseTheme.colors.black
                     }
-                    GPackageBaseText(text = screen.title ?: "", color = textColor)
+                    BaseText(text = screen.title ?: "", color = textColor)
                 },
                 selected = currentRoute == screen.route,
                 colors = NavigationBarItemDefaults.colors(

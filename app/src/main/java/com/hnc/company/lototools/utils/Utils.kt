@@ -141,6 +141,20 @@ fun parseHtml(html: String): ResultModel {
     )
 }
 
+fun Context.fragmentActivity(): FragmentActivity {
+    var curContext = this
+    var maxDepth = 20
+    while (--maxDepth > 0 && curContext !is FragmentActivity) {
+        curContext = (curContext as ContextWrapper).baseContext
+    }
+    return if (curContext is FragmentActivity) {
+        curContext
+    } else {
+        throw IllegalStateException("Find no FragmentActivity from context $this")
+    }
+}
+
+
 fun Double.formatMoneyComma(): String {
     return try {
         val formatter = NumberFormat.getInstance(Locale.GERMANY) as DecimalFormat

@@ -40,10 +40,12 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.hnc.company.lototools.base.composetheme.BaseTheme
 import com.hnc.company.lototools.base.composetheme.scafold.BaseScaffold
-import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
+import com.hnc.company.lototools.base.composetheme.text.BaseText
 import com.hnc.company.lototools.base.composetheme.text.TextType
+import com.hnc.company.lototools.base.mvi.BaseScreen
 import com.hnc.company.lototools.domain.entity.Player
 import com.hnc.company.lototools.domain.entity.Transaction
+import com.hnc.company.lototools.presentation.player.ContentView
 import com.hnc.company.lototools.utils.formatMoneyComma
 
 @Composable
@@ -52,13 +54,25 @@ fun PlayerDetailScreen(
     playerId: String,
     viewModel: PlayerDetailsViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.initData(playerId)
-    }
-
     val transaction = viewModel.transaction.collectAsStateWithLifecycle().value
     val player = viewModel.player.collectAsStateWithLifecycle().value
+    BaseScreen(
+        navigation = navController,
+        viewModel = viewModel,
+        initData = {
+            viewModel.initData(playerId)
+        },
+        handleContent = { state ->
+            PlayerDetailContent(transaction, player)
+        }
+    )
+}
 
+@Composable
+fun PlayerDetailContent(
+    transaction: List<Transaction>,
+    player: Player?
+) {
     BaseScaffold(modifier = Modifier.fillMaxSize(),
         topBarView = {
             Text(
@@ -118,7 +132,7 @@ fun UserView(player: Player) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            GPackageBaseText(
+            BaseText(
                 text = player.name,
                 color = Color.White,
                 type = TextType.BODY1
@@ -126,7 +140,7 @@ fun UserView(player: Player) {
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            GPackageBaseText(
+            BaseText(
                 text = "${player.amount.formatMoneyComma()}đ",
                 color = Color.White,
                 type = TextType.BODY_MEDIUM
@@ -190,7 +204,7 @@ fun TransactionRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Hạng
-        GPackageBaseText(
+        BaseText(
             text = "$index. ${transaction.date}",
             color = Color.White,
             type = TextType.BODY_MEDIUM,
@@ -200,7 +214,7 @@ fun TransactionRow(
         Spacer(modifier = Modifier.weight(1f))
 
         // Hạng
-        GPackageBaseText(
+        BaseText(
             text = "${transaction.playType} | ${transaction.number} | ${transaction.profit.formatMoneyComma()}đ",
             color = Color.White,
             type = TextType.BODY_MEDIUM,

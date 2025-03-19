@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -40,22 +39,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.hnc.company.lototools.base.composetheme.BaseTheme
-import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
+import com.hnc.company.lototools.base.composetheme.text.BaseText
 import com.hnc.company.lototools.base.composetheme.text.TextType
+import com.hnc.company.lototools.base.mvi.BaseScreen
 import com.hnc.company.lototools.utils.nonRippleClick
 import com.hnc.company.lototools.utils.toFormattedDate
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun XSMBResultScreen(
     navController: NavController,
     viewModel: XSMBResultViewModel = hiltViewModel()
 ) {
+    BaseScreen(
+        navigation = navController,
+        viewModel = viewModel,
+        initData = {},
+        handleContent = { state ->
+            XSMBResultContent(navController, viewModel)
+        }
+    )
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun XSMBResultContent(
+    navController: NavController,
+    viewModel: XSMBResultViewModel
+) {
     val players = viewModel.result.collectAsStateWithLifecycle().value
     val date = viewModel.date.collectAsStateWithLifecycle().value
-
     var isShowing by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +102,7 @@ fun XSMBResultScreen(
                         isShowing = true
                     }
             ) {
-                GPackageBaseText(
+                BaseText(
                     text = date,
                     modifier = Modifier
                         .wrapContentHeight()
@@ -121,7 +134,7 @@ fun XSMBResultScreen(
                                 .padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            GPackageBaseText(
+                            BaseText(
                                 text = title,
                                 modifier = Modifier.width(50.dp),
                                 type = if (isDBRow) TextType.BODY1 else TextType.BODY2,
@@ -133,7 +146,7 @@ fun XSMBResultScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 numbers.forEach { number ->
-                                    GPackageBaseText(
+                                    BaseText(
                                         text = number,
                                         modifier = Modifier
                                             .wrapContentHeight()
@@ -162,7 +175,6 @@ fun XSMBResultScreen(
 
         }, onDismiss = { isShowing = false })
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

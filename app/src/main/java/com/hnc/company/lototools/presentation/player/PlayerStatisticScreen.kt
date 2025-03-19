@@ -46,19 +46,31 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.hnc.company.lototools.R
 import com.hnc.company.lototools.base.composetheme.BaseTheme
-import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
+import com.hnc.company.lototools.base.composetheme.text.BaseText
 import com.hnc.company.lototools.base.composetheme.text.TextType
+import com.hnc.company.lototools.base.mvi.BaseScreen
 import com.hnc.company.lototools.domain.entity.Player
 import com.hnc.company.lototools.navigation.BaseNavScreen
 import com.hnc.company.lototools.utils.formatMoneyComma
 import com.hnc.company.lototools.utils.nonRippleClick
-
 
 @Composable
 fun PlayerStatisticScreen(
     navController: NavController,
     viewModel: PlayerStatisticViewModel = hiltViewModel()
 ) {
+    BaseScreen(
+        navigation = navController,
+        viewModel = viewModel,
+        initData = {},
+        handleContent = { state ->
+            ContentView(navController, viewModel)
+        }
+    )
+}
+
+@Composable
+fun ContentView(navController: NavController, viewModel: PlayerStatisticViewModel) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Xếp hạng", "Phân tích")
 
@@ -67,20 +79,17 @@ fun PlayerStatisticScreen(
     val sortedPlayers = players.sortedByDescending { it.amount }
     val topThree = sortedPlayers.take(3)
     val others = sortedPlayers.drop(3)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BaseTheme.colors.background)
     ) {
-        // Phần nền tím + nội dung
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BaseTheme.colors.purplePrimary)
                 .padding(16.dp)
         ) {
-            // Tiêu đề
             Text(
                 text = "Thống kê",
                 style = MaterialTheme.typography.h4.copy(
@@ -89,8 +98,6 @@ fun PlayerStatisticScreen(
                 ),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-
-            // TabRow
             TabRow(
                 modifier = Modifier.clip(RoundedCornerShape(30.dp)),
                 selectedTabIndex = selectedTab,
@@ -102,7 +109,7 @@ fun PlayerStatisticScreen(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index }
                     ) {
-                        GPackageBaseText(
+                        BaseText(
                             text = title,
                             color = BaseTheme.colors.textWhite,
                             type = TextType.BODY_MEDIUM,
@@ -167,7 +174,7 @@ fun TopThreeSection(navController: NavController, top3: List<Player>) {
                 navController.navigate(BaseNavScreen.PlayerDetailScreen.route.plus("/${top3[1].playerId}"))
             }, horizontalAlignment = Alignment.CenterHorizontally) {
 
-                GPackageBaseText(
+                BaseText(
                     modifier = Modifier
                         .clip(RoundedCornerShape(3.dp))
                         .background(Color(0xFFC0C0C0))
@@ -187,13 +194,13 @@ fun TopThreeSection(navController: NavController, top3: List<Player>) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                GPackageBaseText(
+                BaseText(
                     text = top3[1].name,
                     color = Color.White,
                     type = TextType.BODY_MEDIUM
                 )
 
-                GPackageBaseText(
+                BaseText(
                     text = "${top3[1].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
@@ -231,13 +238,13 @@ fun TopThreeSection(navController: NavController, top3: List<Player>) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                GPackageBaseText(
+                BaseText(
                     text = top3[0].name,
                     color = Color.White,
                     type = TextType.BODY_MEDIUM
                 )
 
-                GPackageBaseText(
+                BaseText(
                     text = "${top3[0].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
@@ -253,7 +260,7 @@ fun TopThreeSection(navController: NavController, top3: List<Player>) {
                 navController.navigate(BaseNavScreen.PlayerDetailScreen.route.plus("/${top3[2].playerId}"))
             }, horizontalAlignment = Alignment.CenterHorizontally) {
 
-                GPackageBaseText(
+                BaseText(
                     modifier = Modifier
                         .clip(RoundedCornerShape(3.dp))
                         .background(Color(0xFFCD7F32))
@@ -273,13 +280,13 @@ fun TopThreeSection(navController: NavController, top3: List<Player>) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                GPackageBaseText(
+                BaseText(
                     text = top3[2].name,
                     color = Color.White,
                     type = TextType.BODY_MEDIUM
                 )
 
-                GPackageBaseText(
+                BaseText(
                     text = "${top3[2].amount.formatMoneyComma()}đ",
                     color = Color.White,
                     type = TextType.BODY_SMALL
@@ -356,7 +363,7 @@ fun LeaderboardRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Hạng
-        GPackageBaseText(
+        BaseText(
             text = rank.toString(),
             color = Color.White,
             type = TextType.BODY_MEDIUM,

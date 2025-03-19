@@ -23,7 +23,7 @@ enum class TextType {
 }
 
 @Composable
-fun GPackageBaseText(
+fun BaseText(
     text: String,
     modifier: Modifier = Modifier,
     type: TextType = TextType.BODY,
@@ -60,6 +60,6 @@ fun GPackageBaseText(
 @Composable
 private fun BaseTextPreview() {
     BaseTheme {
-        GPackageBaseText("BaseTextPreview")
+        BaseText("BaseTextPreview")
     }
 }

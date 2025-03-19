@@ -1,4 +1,4 @@
-package com.ghtk.business.gpackage.base.composetheme.images
+package com.hnc.company.lototools.base.composetheme.images
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable

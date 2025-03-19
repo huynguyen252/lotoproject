@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hnc.company.lototools.base.composetheme.BaseTheme
-import com.hnc.company.lototools.base.composetheme.text.GPackageBaseText
+import com.hnc.company.lototools.base.composetheme.text.BaseText
 import com.hnc.company.lototools.base.composetheme.text.TextType
 import com.hnc.company.lototools.utils.rippleClick
 
@@ -26,7 +26,7 @@ fun BaseButton(
     textColor: Color = Color.White,
     onClick: () -> Unit = {}
 ) {
-    GPackageBaseText(
+    BaseText(
         modifier = modifier
             .clip(shape)
             .background(

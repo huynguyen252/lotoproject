@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 
 @Composable
-public fun GPackageIconButton(
+public fun BaseIconButton(
     modifier: Modifier = Modifier,
     painter: Painter,
     onClick: () -> Unit = {},
