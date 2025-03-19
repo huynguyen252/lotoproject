@@ -1,6 +1,5 @@
 package com.hnc.company.lototools.presentation.result
 
-import android.util.Log
 import com.hnc.company.lototools.base.mvi.BaseViewModel
 import com.hnc.company.lototools.data.request.GetResultRequest
 import com.hnc.company.lototools.domain.entity.ResultModel
